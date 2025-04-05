@@ -1,11 +1,32 @@
+import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, View, Image, TextInput } from 'react-native';
+
+type Endereco = {
+  cep: string;
+  logradouro: string;
+  bairro: string;
+  localidade: string;
+  uf: string;
+}
 
 export default function App() {
   const [contador, setContador]  = useState(0);
   const [cep, setCep] = useState('')
   const [endereco, setEndereco] = useState<any>(null) // Variável para contar
+
+
+  useEffect( () => {
+  axios.get('https://viacep.com.br/ws/09390-120/json')
+  }, []);
+
+  async function carregarCEPInical() {
+    let resposta = axios.get('https://viacep.com.br/ws/09390-120/json')
+    let novoEndereco = (await resposta).data;
+    setEndereco(novoEndereco)
+    setEndereco((await resposta).data)
+  }
   
   function contar() {
     setContador(contador+1) // Incrementa o contador
